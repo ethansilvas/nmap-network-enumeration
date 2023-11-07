@@ -4,7 +4,6 @@ In this project...
 ## Host Enumeration
 
 To conduct an internal penetration test it is beneficial to first see which systems are online. ICMP echo requests are effective in discovering these hosts. 
-
 ### Host Discovery
 #### Scanning a Network Range
 
@@ -49,8 +48,22 @@ I can then use the following options to get more info on why the host is describ
 ![](Images/Pasted%20image%2020231106194509.png)
 ### Host and Port Scanning
 
+#### Scanning Top Ports
+Now with knowledge of the open hosts I can begin to scan for ports, services, and operating system information. 
 
+First I scan a target host with Nmap's list of most frequently used ports:
 
+![](Images/Pasted%20image%2020231107151007.png)
+
+With `--top-ports=10` I specify to grab the top ten most used ports from Nmap's list. 
+
+To get a more detailed look at the closed FTP port I use a SYN scan on the specific port to verify the RST packet is received from the host: 
+
+![](Images/Pasted%20image%2020231107152036.png)
+
+Using `--packet-trace -Pn -n --disable-arp-ping` disables ICMP echo, DNS, and ARP pings while also showing all the packets sent and received to verify the response from the host. In this example I can see that the host responded (in the RCVD line) with a TCP packet containing the flags RA, meaning it responded with the RST and ACK packets signaling that the port was indeed closed. 
+
+####
 ## Bypass Security Measures
 
 ## Notes 
@@ -99,5 +112,19 @@ default to do -sS
 - if syn/ack packet returned, then port is open
 - RST = closed 
 - no packet = filtered 
+- unfiltered = tcp-ack scan shows port accessible but cant tell if open/closed
+- open|filtered = dont get response from specific port; firewall or packet filter 
+- closed|filtered = IP ID idle scans; impossible to determine if port is closed or filtered
 
 ex: sudo nmap -sS localhost
+
+default will scan top 1000 TCP ports with SYN 
+
+SYN is only default when ran as root because of socket permissions required to create raw TCP packets 
+
+TCP scan will default without sudo
+
+defining ports: 
+- individual = `-p 22, 25, 80`
+- range = `-p 22-445`
+- top ports = `--top-ports=10`
