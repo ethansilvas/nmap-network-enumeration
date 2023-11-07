@@ -5,7 +5,10 @@ In this project...
 
 To conduct an internal penetration test it is beneficial to first see which systems are online. ICMP echo requests are effective in discovering these hosts. 
 
-I first scan a network range for open hosts: 
+### Host Discovery
+#### Scanning a Network Range
+
+I first use an IP range to scan for open hosts: 
 
 ![](Images/Pasted%20image%2020231106190952.png)
 
@@ -21,7 +24,7 @@ With the list I can then perform an identical scan but with the predefined list 
 
 ![](Images/Pasted%20image%2020231106192249.png)
 
-With both of these searches the outputs are stored in the specified tnet files: 
+With both of these searches the outputs are stored in the specified files with name tnet: 
 
 ![](Images/Pasted%20image%2020231106192510.png)
 
@@ -30,6 +33,22 @@ Some other ways I could do this either use specific IP addresses or specify the 
 `sudo nmap -sn -oA tnet 10.129.2.18 10.129.2.19 10.129.2.20 | grep for | cut -d" " -f5`
 
 `sudo nmap -sn -oA tnet 10.129.2.18-20 | grep for | cut -d" " -f5`
+
+#### Scan Single IP Addresses
+
+Before performing port, service, OS, etc. scanning on an IP, it is good to check to see if the host is alive and responsive. 
+
+I use the same scan before on the target IP addresses to see which ones are up: 
+
+![](Images/Pasted%20image%2020231106193802.png)
+
+I can then use the following options to get more info on why the host is described as being up: 
+- `-PE` = send ICMP echo requests 
+- `--reason` = output the type of reply that was received from the host
+
+![](Images/Pasted%20image%2020231106194509.png)
+### Host and Port Scanning
+
 
 
 ## Bypass Security Measures
