@@ -9,19 +9,19 @@ To conduct an internal penetration test it is beneficial to first see which syst
 
 I first use an IP range to scan for open hosts: 
 
-![](Images/Pasted%20image%2020231106190952.png)
+![](Images/Pasted%20image%2020231108141021.png)
 
 These options are used to: 
 - `-sn` = skip port scanning 
-- `-oA tnet` = store results in formats starting with tnet
+- `-oA hosts` = store results in formats starting with hosts
 
 Then I create a list of IP addresses with the following IPs:
 
-![](Images/Pasted%20image%2020231106192214.png)
+![](Images/Pasted%20image%2020231108141343.png)
 
 With the list I can then perform an identical scan but with the predefined list rather than a provided range using the `-il hosts.lst` option:
 
-![](Images/Pasted%20image%2020231106192249.png)
+![](Images/Pasted%20image%2020231108141359.png)
 
 With both of these searches the outputs are stored in the specified files with name tnet: 
 
@@ -116,8 +116,9 @@ Using a quick scan of all ports and their services with `-p- -sV` I can get all 
 Sometimes Nmap doesn't know how to handle all the info that it receives since banners aren't required to be given immediately. One way to circumvent this is connecting to the service directly with netcat and capturing the traffic with tcpdump: 
 
 ![](Images/Pasted%20image%2020231108140024.png)
-
 ### Nmap Scripting Engine
+
+
 
 ## Bypass Security Measures
 
