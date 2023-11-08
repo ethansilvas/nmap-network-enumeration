@@ -106,6 +106,18 @@ Also, I can convert the XML output file to a report-style HTML file using the to
 
 ### Service Enumeration
 
+Scanning for services gives information on the types of applications being used, their versions, and the known vulnerabilities that can be exploited for those versions. 
+
+Using a quick scan of all ports and their services with `-p- -sV` I can get all TCP ports with their service and version: 
+
+![](Images/Pasted%20image%2020231108123618.png)
+#### Banner Grabbing 
+
+Sometimes Nmap doesn't know how to handle all the info that it receives since banners aren't required to be given immediately. One way to circumvent this is connecting to the service directly with netcat and capturing the traffic with tcpdump: 
+
+![](Images/Pasted%20image%2020231108140024.png)
+
+### Nmap Scripting Engine
 
 ## Bypass Security Measures
 
@@ -192,3 +204,32 @@ save results in 3 different formats:
 
 `-oA` will save in all 3 formats
 
+version scanning 
+- start with port scan `-p- -sV`
+- can get stats in intervals `--stats-every=10s`
+- can change verbosity to see when ports are detected `-v` `-vv`
+
+banner grabbing
+- tries to id service through banners
+- if banners don't work then it uses signature detection but takes a lot longer
+
+Sometimes nmap gets results that it doesn't know how to handle 
+
+- `NSOCK INFO [0.4200s] nsock_trace_handler_callback(): Callback: READ SUCCESS for EID 18 [10.129.2.28:25] (35 bytes): 220 inlane ESMTP Postfix (Ubuntu)..`
+
+in this example, the server sends banner after TCP handshake with PSH flag at network level
+
+some services don't always provide the banner info 
+
+another way to get banners is to manually connect to the server using nc, grab banner, and intercept traffic using tcpdump
+
+ex: 
+- start packet capture `sudo tcpdump -i eth0 host 10.10.14.2 and 10.129.2.28`
+- connect with netcat `nc -nv 10.129.2.28 25`
+
+in the tcpdump logs you can verify TCP handshake 
+- Flags [S] = SYN 
+- Flags [S.] = SYN-ACK
+- Flags [.] = ACK 
+- Flags [P.] = PSH and ACK meaning target server is sending us data and that all required data is sent
+- Flags [.] = ACK to confirm receipt of data
