@@ -80,7 +80,17 @@ If the host's firewall had rejected the packets then the scan time would have be
 
 #### UDP Scans
 
+Checking for UDP ports is trickier because UDP packets do not require responses like TCP connections do. Any open UDP ports that send responses back are because the application is configured to do so. 
 
+Here I run a scan for open UDP ports and do a packet trace on one that is listed as open: 
+
+![](Images/Pasted%20image%2020231107170905.png)
+
+#### Scanning for Versions
+
+Another useful scan on specific ports is to check for their versions, service names, and other service info:
+
+![](Images/Pasted%20image%2020231107174044.png)
 
 ## Bypass Security Measures
 
@@ -153,3 +163,9 @@ defining ports:
 - most accurate way of determining state of port 
 - evades firewalls that drop incoming packets but allow outgoing packets 
 - slower because it waits on each response
+
+UDP scans are sometimes forgotten to be filtered and also don't receive a response like TCP 
+
+UDP is also much longer with timeout times
+
+if a response is given from a UDP scan and the port is listed as "open" then it is because the app is configured to respond, otherwise there is no way to tell if the packet arrived or not
