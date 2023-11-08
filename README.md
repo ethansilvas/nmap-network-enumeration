@@ -32,7 +32,6 @@ Some other ways I could do this either use specific IP addresses or specify the 
 `sudo nmap -sn -oA tnet 10.129.2.18 10.129.2.19 10.129.2.20 | grep for | cut -d" " -f5`
 
 `sudo nmap -sn -oA tnet 10.129.2.18-20 | grep for | cut -d" " -f5`
-
 #### Scan Single IP Addresses
 
 Before performing port, service, OS, etc. scanning on an IP, it is good to check to see if the host is alive and responsive. 
@@ -63,7 +62,26 @@ To get a more detailed look at the closed FTP port I use a SYN scan on the speci
 
 Using `--packet-trace -Pn -n --disable-arp-ping` disables ICMP echo, DNS, and ARP pings while also showing all the packets sent and received to verify the response from the host. In this example I can see that the host responded (in the RCVD line) with a TCP packet containing the flags RA, meaning it responded with the RST and ACK packets signaling that the port was indeed closed. 
 
-####
+#### TCP Connect Scan
+
+To get more accurate results on if a port is open or not, I use `-sT` to enable a TCP connection scan on HTTP/HTTPS ports: 
+
+![](Images/Pasted%20image%2020231107161001.png)
+
+#### Filtered Ports
+
+Some ports are displayed as filtered and doing a packet trace on these ports can help determine if the host dropped or rejected the packets I have sent it. 
+
+Doing a packet trace on the filtered port 445 (with the default max retries of 1) shows that the overall scan time took much longer than usual at 2.11 seconds, meaning that the packet was likely dropped: 
+
+![](Images/Pasted%20image%2020231107163744.png)
+
+If the host's firewall had rejected the packets then the scan time would have been much shorter, for example 0.05 seconds. It would also be likely that I would receive an ICMP reply with type 3 and error code 3 showing that the host would be unreachable. 
+
+#### UDP Scans
+
+
+
 ## Bypass Security Measures
 
 ## Notes 
@@ -128,3 +146,10 @@ defining ports:
 - individual = `-p 22, 25, 80`
 - range = `-p 22-445`
 - top ports = `--top-ports=10`
+
+`-sT` = TCP connection scan 
+- more stealth since it does not leave any unfinished connections or unsent packets 
+- won't disturb services but still able to map network 
+- most accurate way of determining state of port 
+- evades firewalls that drop incoming packets but allow outgoing packets 
+- slower because it waits on each response
