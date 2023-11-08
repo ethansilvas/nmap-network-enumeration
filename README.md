@@ -23,28 +23,28 @@ With the list I can then perform an identical scan but with the predefined list 
 
 ![](Images/Pasted%20image%2020231108141359.png)
 
-With both of these searches the outputs are stored in the specified files with name tnet: 
+With both of these searches the outputs are stored in the specified files with name hosts: 
 
-![](Images/Pasted%20image%2020231106192510.png)
+![](Images/Pasted%20image%2020231108141448.png)
 
 Some other ways I could do this either use specific IP addresses or specify the range in the octet: 
 
-`sudo nmap -sn -oA tnet 10.129.2.18 10.129.2.19 10.129.2.20 | grep for | cut -d" " -f5`
+`sudo nmap -sn -oA hosts 10.129.2.18 10.129.2.19 10.129.2.20 | grep for | cut -d" " -f5`
 
-`sudo nmap -sn -oA tnet 10.129.2.18-20 | grep for | cut -d" " -f5`
+`sudo nmap -sn -oA hosts 10.129.2.18-20 | grep for | cut -d" " -f5`
 #### Scan Single IP Addresses
 
 Before performing port, service, OS, etc. scanning on an IP, it is good to check to see if the host is alive and responsive. 
 
 I use the same scan before on the target IP addresses to see which ones are up: 
 
-![](Images/Pasted%20image%2020231106193802.png)
+![](Images/Pasted%20image%2020231108141627.png)
 
 I can then use the following options to get more info on why the host is described as being up: 
 - `-PE` = send ICMP echo requests 
 - `--reason` = output the type of reply that was received from the host
 
-![](Images/Pasted%20image%2020231106194509.png)
+![](Images/Pasted%20image%2020231108141708.png)
 ### Host and Port Scanning
 
 #### Scanning Top Ports
@@ -52,13 +52,13 @@ Now with knowledge of the open hosts I can begin to scan for ports, services, an
 
 First I scan a target host with Nmap's list of most frequently used ports:
 
-![](Images/Pasted%20image%2020231107151007.png)
+![](Images/Pasted%20image%2020231108141746.png)
 
 With `--top-ports=10` I specify to grab the top ten most used ports from Nmap's list. 
 
 To get a more detailed look at the closed FTP port I use a SYN scan on the specific port to verify the RST packet is received from the host: 
 
-![](Images/Pasted%20image%2020231107152036.png)
+![](Images/Pasted%20image%2020231108141837.png)
 
 Using `--packet-trace -Pn -n --disable-arp-ping` disables ICMP echo, DNS, and ARP pings while also showing all the packets sent and received to verify the response from the host. In this example I can see that the host responded (in the RCVD line) with a TCP packet containing the flags RA, meaning it responded with the RST and ACK packets signaling that the port was indeed closed. 
 
@@ -66,7 +66,7 @@ Using `--packet-trace -Pn -n --disable-arp-ping` disables ICMP echo, DNS, and AR
 
 To get more accurate results on if a port is open or not, I use `-sT` to enable a TCP connection scan on HTTP/HTTPS ports: 
 
-![](Images/Pasted%20image%2020231107161001.png)
+![](Images/Pasted%20image%2020231108142055.png)
 
 #### Filtered Ports
 
@@ -74,7 +74,7 @@ Some ports are displayed as filtered and doing a packet trace on these ports can
 
 Doing a packet trace on the filtered port 445 (with the default max retries of 1) shows that the overall scan time took much longer than usual at 2.11 seconds, meaning that the packet was likely dropped: 
 
-![](Images/Pasted%20image%2020231107163744.png)
+![](Images/Pasted%20image%2020231108142225.png)
 
 If the host's firewall had rejected the packets then the scan time would have been much shorter, for example 0.05 seconds. It would also be likely that I would receive an ICMP reply with type 3 and error code 3 showing that the host would be unreachable. 
 
@@ -84,7 +84,7 @@ Checking for UDP ports is trickier because UDP packets do not require responses 
 
 Here I run a scan for open UDP ports and do a packet trace on one that is listed as open: 
 
-![](Images/Pasted%20image%2020231107170905.png)
+![](Images/Pasted%20image%2020231108142505.png)
 
 #### Scanning for Versions
 
