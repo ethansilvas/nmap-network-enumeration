@@ -92,6 +92,21 @@ Another useful scan on specific ports is to check for their versions, service na
 
 ![](Images/Pasted%20image%2020231107174044.png)
 
+### Saving the Results
+
+Using the option `-oA` I save the results of these scans to files that are readable, grepable, and also in XML format:
+
+![](Images/Pasted%20image%2020231107191315.png)
+
+Also, I can convert the XML output file to a report-style HTML file using the tool **xsltproc**: 
+
+`xsltproc target.xml -o target.html` 
+
+![](Images/Pasted%20image%2020231107191628.png)
+
+### Service Enumeration
+
+
 ## Bypass Security Measures
 
 ## Notes 
@@ -169,3 +184,11 @@ UDP scans are sometimes forgotten to be filtered and also don't receive a respon
 UDP is also much longer with timeout times
 
 if a response is given from a UDP scan and the port is listed as "open" then it is because the app is configured to respond, otherwise there is no way to tell if the packet arrived or not
+
+save results in 3 different formats: 
+- normal output with .nmap `-oN`
+- grepable output with .gnmap `-oG`
+- XML output with .xml `-oX`
+
+`-oA` will save in all 3 formats
+
