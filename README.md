@@ -118,8 +118,33 @@ Sometimes Nmap doesn't know how to handle all the info that it receives since ba
 ![](Images/Pasted%20image%2020231108140024.png)
 ### Nmap Scripting Engine
 
+Nmap also gives access to various Lua scripts that can can search for specific info or vulnerabilities. 
 
+To begin using these scripts I choose a host and run the default scripts that Nmap uses with the `-sC` option:
 
+![](Images/Pasted%20image%2020231108150304.png)
+
+I can also choose to run specific script categories like the `vuln` category:
+
+![](Images/Pasted%20image%2020231108150725.png)
+
+Or I could choose to run specific scripts like the `banner` script for banner grabbing: 
+
+![](Images/Pasted%20image%2020231108150902.png)
+
+If it is possible to be more aggressive with the scans, then I can opt to use `-A` to do service detection, OS detection, a traceroute, and run the default scripts:
+
+![](Images/Pasted%20image%2020231108151853.png)
+
+#### Web Server Vulnerability Assessment 
+
+Web servers are some of the most common targets because they are made public to users. Using NSE scripts it is quick and easy to see if a server has known vulnerabilities that can be exploited: 
+
+![](Images/Pasted%20image%2020231108155257.png)
+
+From this scan using the `vuln` script category, I can see that the web server has a public file **robots.txt**. I can view this page in my browser to gain potentially valuable information:
+
+![](Images/Pasted%20image%2020231108155035.png)
 ## Bypass Security Measures
 
 ## Notes 
@@ -234,3 +259,21 @@ in the tcpdump logs you can verify TCP handshake
 - Flags [.] = ACK 
 - Flags [P.] = PSH and ACK meaning target server is sending us data and that all required data is sent
 - Flags [.] = ACK to confirm receipt of data
+
+NSE = nmap scripting engine 
+
+scripts use LUA 
+- auth = auth creds
+- broadcast = host discovery by broadcast 
+- brute = try to log in with brute force
+- default = -sC option
+- discovery = find services
+- dos = check for DoS vulns 
+- exploit = exploit vulns for port 
+- external = external services for further processing 
+- fuzzer = id vulns and unexpected packet handling by sending different fields
+- intrusive = intrusive scripts that could impact system
+- malware = checks if malware exists on system 
+- safe = defensive scripts that are not intrusive
+- version = extension for service detection 
+- vuln = id of specific vulns
