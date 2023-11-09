@@ -72,7 +72,7 @@ To get more accurate results on if a port is open or not, I use `-sT` to enable 
 
 Some ports are displayed as filtered and doing a packet trace on these ports can help determine if the host dropped or rejected the packets I have sent it. 
 
-Doing a packet trace on the filtered port 445 (with the default max retries of 1) shows that the overall scan time took much longer than usual at 2.11 seconds, meaning that the packet was likely dropped: 
+Doing a packet trace on the filtered port 445 (with the default max retries of 10) shows that the overall scan time took much longer than usual at 2.11 seconds, meaning that the packet was likely dropped: 
 
 ![](Images/Pasted%20image%2020231108142225.png)
 
@@ -145,6 +145,38 @@ Web servers are some of the most common targets because they are made public to 
 From this scan using the `vuln` script category, I can see that the web server has a public file **robots.txt**. I can view this page in my browser to gain potentially valuable information:
 
 ![](Images/Pasted%20image%2020231108155035.png)
+
+### Performance
+
+Scanning and enumerating large networks can take a long time and may be difficult with limited bandwidth. Nmap provides options to control settings like timeout times, maximum number of retries, and maximum number of simultaneous packets being sent. 
+
+To see how performance can be optimized with these options I start by running a default fast scan on a range of IPs: 
+
+![](Images/Pasted%20image%2020231108182638.png)
+![](Images/Pasted%20image%2020231108182711.png)
+
+Then, I modify the scan by changing the initial RTT (round time trip) timeout to be 50ms and the maximum to be 100ms. 
+
+![](Images/Pasted%20image%2020231108182857.png)
+![](Images/Pasted%20image%2020231108182914.png)
+
+The results show that the overall scan time was significantly faster at 2.62 seconds and in this example found the same amount of hosts as the default fast scan. In other examples some hosts may not be scanned with the modified timeout settings. 
+
+In whitebox penetration tests, for example, there may be more bandwidth to perform scans. One way to take advantage of this is by increasing the number of simultaneous packets Nmap sends out when scanning.
+
+Changing the number of packets using `--min-rate 300` will also heavily reduce the overall scan time compared to the default fast scan:
+
+![](Images/Pasted%20image%2020231108185715.png)
+![](Images/Pasted%20image%2020231108185732.png)
+
+![](Images/Pasted%20image%2020231108185750.png)
+![](Images/Pasted%20image%2020231108185805.png)
+
+If the case were that the options weren't able to be modified as we would like, there are more general ways to change the timing and aggressiveness of the scan with the `-T` option.
+
+`-T5` is the fastest but also the most aggressive scan type:
+
+![](Images/Pasted%20image%2020231108191831.png)
 ## Bypass Security Measures
 
 ## Notes 
@@ -277,3 +309,22 @@ scripts use LUA
 - safe = defensive scripts that are not intrusive
 - version = extension for service detection 
 - vuln = id of specific vulns
+
+performance 
+- how fast = `-T<0-5>`
+- frequency = `--min-parallelism <number>` 
+- timeouts = `--max-rtt-timeout <time>`
+- how many packets should be sent simultaneously `--min-rate <number>`
+- number of retries `--max-retries <number>`
+
+RTT = round trip time = how long it will take to receive a response from port after nmap sends packet
+
+generally --min-rtt-timeout = 100ms
+
+Timing and aggressiveness
+- `-T 0` / `-T paranoid`
+- `-T 1` / `-T sneaky`
+- `-T 2` / `-T polite`
+- `-T 3` / `-T normal`
+- `-T 4` / `-T aggressive`
+- `-T 5` / `-T insane`
