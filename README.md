@@ -256,6 +256,20 @@ Both came back with Linux Ubuntu as their OS and after confirming that ports 139
 
 ### Target 2 - Medium
 
+For this target I want to find out the server version for the target's DNS server. To do some initial reconnaissance on the port I run a TCP ACK scan on port 53 with a packet trace: 
+
+![](Images/Pasted%20image%2020231110131827.png)
+
+The port is listed as filtered and I did not receive any RST packets in response to the ACK packets sent. 
+
+Looking through the Nmap documentation I found there is a script specifically for DNS server version discovery, `dns-nsid`:
+
+![](Images/Pasted%20image%2020231110132140.png)
+
+Running this was very fast and did not raise any significant amount of alerts from the security controls:
+
+![](Images/Pasted%20image%2020231110132220.png)
+
 ### Target 3 - Hard
 
 ## Notes 
