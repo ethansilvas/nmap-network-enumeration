@@ -189,11 +189,48 @@ If the case were that the options weren't able to be modified as we would like, 
 
 Now that I have completed many different scans on the target hosts and tried various options that Nmap provides to modify its default scans, I will now test different stealth options. If this were a live scenario it would be necessary to attempt to avoid security measures put in place by the target such as firewall and IDS/IPS rules. 
 
-In this section I will first compare the results of the default Nmap scans versus some of its more stealthy options. Then I will complete three labs setup with example targets that have varying levels of security measures in place. 
+In this section I will compare the results of the default Nmap scans versus some of its more stealthy options. 
 
 ### Firewall and IDS/IPS Evasion
 
-Nmap provides tools 
+Some of the stealth options that Nmap provides are related to the types of packets that Nmap sends when scanning for ports. Sending TCP ACK packets is considered to be much more stealthy as it can get past security rules because the target system can't determine if the connection was initiated internally or externally. 
+
+#### Stealth Scans
+
+First, I compare the results of an ACK scan and the default SYN scan, `-sA` versus `-sS`
+
+![](Images/Pasted%20image%2020231109165452.png)
+![](Images/Pasted%20image%2020231109165848.png)
+
+These results show that the RCVD packets change because instead of the target host responding with SYN/ACK or RST and ACK packets it will only respond with RST packets in response to the ACK packets that Nmap sent. 
+
+#### Decoys
+
+If it is known that the target host will block certain subnets or has an IPS in place that will block any connections, then Nmap provides the option to send decoy packets with randomly generated IP addresses. 
+
+I use the option `-D RND:5` to send SYN packets to the target on port 80 but with 5 randomly generated IP addresses:
+
+![](Images/Pasted%20image%2020231109172815.png)
+
+Nmap will automatically mix in the actual IP that I use to perform the scan. 
+
+#### Changing IP Addresses
+
+Now I will try to detect a hosts OS normally and then try with a specified IP address:
+
+![](Images/Pasted%20image%2020231109174137.png)
+![](Images/Pasted%20image%2020231109175039.png)
+
+#### DNS Proxying
+
+Nmap typically performs reverse DNS resolution to learn more about the host. Nmap allows the option to specify DNS servers and source ports to attempt to get past misconfiguration of IDS/IPS filters. 
+
+An example of this would be using `--source-port` to send the packet from the DNS port 53 even though I am trying to scan port 445. 
+
+![](Images/Pasted%20image%2020231109180153.png)
+
+## Lab 1
+
 
 ## Notes 
 
@@ -367,4 +404,38 @@ when port is open or closed, responds to ACK with RST flag
 most incoming connection attempts, with SYN flag for example, are usually filtered
 
 ACK flags are typically passed because the firewall can't determine if connection was established from inside or outside network 
+
+IDS/IPS detection is much more difficult because they are passive and examine all connections between hosts
+
+it is recommended to use several VPS with different IPs to determine if IDS/IPS are active on host because IPs will typically instantly get blocked if detected
+
+can intentionally do aggressive scans to check for a security response 
+
+decoy scanning can be used when specific subnets from different regions are blocked or if the IPS should block 
+
+decoy = nmap generates random IP addresses into IP header to disguise origin of packet 
+
+`-D RND:5` = generate 5 random IP addresses
+
+the real IP address will be placed in between the randomly generated IPs 
+
+decoys must be alive because then the service on the target may be unreachable due to SYN flooding security mechanisms 
+
+can specify VPS servers IPs and use them in combo with `IP ID` manipulation in IP header
+
+specify source IP address with `-S`
+
+mostly UDP port 53 for DNS 
+
+TCP port 53 used to be only for zone transfers but changing now with IPv6
+
+can specify DNS server with `--dns-server <ns>,<ns>` 
+
+if in a DMZ this will be very valuable 
+
+company's DNS servers are trusted more than those from internet
+
+could use org's DNS servers to interact with hosts on internal network 
+
+can use TCP port 53 as source port with `--source-port`, if admin uses firewall to control this port and doesn't filter properly then TCP packets will be trusted 
 
