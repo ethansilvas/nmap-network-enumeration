@@ -229,8 +229,34 @@ An example of this would be using `--source-port` to send the packet from the DN
 
 ![](Images/Pasted%20image%2020231109180153.png)
 
-## Lab 1
+## Security Evasion
 
+Now that I have experimented with many of the tools that Nmap provides to learn more about hosts and how to modify its scans to be more stealthy, I will test these methods on three example targets. 
+
+### Target 1 - Easy
+
+For this target I am tasked with finding the OS that the host system is using. There is an IDS/IPS in place that will block my IP address for 3 minutes if a certain number of alerts has been reached. I have been provided with the status page that shows me the number of alerts that have been raised: 
+
+![](Images/Pasted%20image%2020231109185750.png)
+
+This IDS/IPS will record alerts very quickly if I try aggressive scans like doing a simple `sudo nmap 10.129.89.236 -A`. 
+
+Some of the ports that I want to investigate for OS information are 22, 80, 139, and 445. Ports 22 and 80 could easily reveal the OS being used and ports 139 and 445 could potentially verify that it is a Windows host. 
+
+I first started with a stealthy TCP ACK scan to see some of the top ports:
+
+![](Images/Pasted%20image%2020231109190326.png)
+
+Seeing as ports 22 and 80 were both unfiltered I thought that these may be my best options, so I did service scans on both:
+
+![](Images/Pasted%20image%2020231109190456.png)
+![](Images/Pasted%20image%2020231109190435.png)
+
+Both came back with Linux Ubuntu as their OS and after confirming that ports 139 and 445 were unresponsive I submitted and confirmed that the OS was Ubuntu. 
+
+### Target 2 - Medium
+
+### Target 3 - Hard
 
 ## Notes 
 
