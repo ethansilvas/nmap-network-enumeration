@@ -3,7 +3,15 @@
 In this project...
 ## Host Enumeration
 
-To conduct an internal penetration test it is beneficial to first see which systems are online. ICMP echo requests are effective in discovering these hosts. 
+Nmap provides many tools to discover responsive hosts in a provided IP range and then perform scans to learn valuable information about the host that could be used as intrusion methods. In this section I will go through some of the most important tools on an example target with the following steps: 
+
+1. Discover any responsive hosts within a range of IP addresses
+2. Perform port scanning on the responsive hosts
+3. Save the results in different formats
+4. Discover application services for the different ports found on the hosts
+5. Use Nmap Scripting Engine to discover potential vulnerabilities based on the discovered services
+
+After these scans have been completed, I will then test different performance optimization techniques and compare the results to more default scanning options. 
 ### Host Discovery
 #### Scanning a Network Range
 
@@ -179,6 +187,14 @@ If the case were that the options weren't able to be modified as we would like, 
 ![](Images/Pasted%20image%2020231108191831.png)
 ## Bypass Security Measures
 
+Now that I have completed many different scans on the target hosts and tried various options that Nmap provides to modify its default scans, I will now test different stealth options. If this were a live scenario it would be necessary to attempt to avoid security measures put in place by the target such as firewall and IDS/IPS rules. 
+
+In this section I will first compare the results of the default Nmap scans versus some of its more stealthy options. Then I will complete three labs setup with example targets that have varying levels of security measures in place. 
+
+### Firewall and IDS/IPS Evasion
+
+Nmap provides tools 
+
 ## Notes 
 
 ### Enumeration
@@ -328,3 +344,27 @@ Timing and aggressiveness
 - `-T 3` / `-T normal`
 - `-T 4` / `-T aggressive`
 - `-T 5` / `-T insane`
+
+firewall = monitor net traffic and handles connections based on rules
+IDS = reports detected attacks based on network scans
+IPS = block after detection
+
+dropped packets from firewall = ignored and no response
+rejected = return with RST flag 
+
+RST packet contains different types of ICMP error codes 
+- net unreachable 
+- net prohibited 
+- host unreachable 
+- host prohibited 
+- port unreachable 
+- proto unreachable 
+
+TCP ACK scan `-sA` is much harder to filter compared to `-sS` or `-sT` 
+
+when port is open or closed, responds to ACK with RST flag 
+
+most incoming connection attempts, with SYN flag for example, are usually filtered
+
+ACK flags are typically passed because the firewall can't determine if connection was established from inside or outside network 
+
