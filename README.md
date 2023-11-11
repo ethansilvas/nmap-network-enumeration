@@ -1,6 +1,36 @@
 # Nmap Network Enumeration
 
 In this project...
+
+## Table of Contents
+
+- [Host Enumeration](#host-enumeration)
+  - [Host Discovery](#host-discovery)
+    - [Scanning a Network Range](#scanning-a-network-range)
+    - [Scan Single IP Addresses](#scan-single-ip-addresses)
+  - [Host and Port Scanning](#host-and-port-scanning)
+    - [Scanning Top Ports](#scanning-top-ports)
+    - [TCP Connect Scan](#tcp-connect-scan)
+    - [Filtered Ports](#filtered-ports)
+    - [UDP Scans](#udp-scans)
+    - [Scanning for Versions](#scanning-for-versions)
+  - [Saving the Results](#saving-the-results)
+  - [Service Enumeration](#service-enumeration)
+    - [Banner Grabbing](#banner-grabbing)
+  - [Nmap Scripting Engine](#nmap-scripting-engine)
+    - [Web Server Vulnerability Assessment](#web-server-vulnerability-assessment)
+  - [Performance](#performance)
+- [Bypass Security Measures](#bypass-security-measures)
+  - [Firewall and IDS/IPS Evasion](#firewall-and-idsips-evasion)
+    - [Stealth Scans](#stealth-scans)
+    - [Decoys](#decoys)
+    - [Changing IP Addresses](#changing-ip-addresses)
+    - [DNS Proxying](#dns-proxying)
+- [Security Evasion](#security-evasion)
+  - [Target 1 - Easy](#target-1---easy)
+  - [Target 2 - Medium](#target-2---medium)
+  - [Target 3 - Hard](#target-3---hard)
+
 ## Host Enumeration
 
 Nmap provides many tools to discover responsive hosts in a provided IP range and then perform scans to learn valuable information about the host that could be used as intrusion methods. In this section I will go through some of the most important tools on an example target with the following steps: 
