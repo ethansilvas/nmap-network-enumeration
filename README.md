@@ -266,12 +266,48 @@ Looking through the Nmap documentation I found there is a script specifically fo
 
 ![](Images/Pasted%20image%2020231110132140.png)
 
-Running this was very fast and did not raise any significant amount of alerts from the security controls:
+The results show the intended banner in the **bind.version** section. Running this was very fast and did not raise any significant amount of alerts from the security controls:
 
 ![](Images/Pasted%20image%2020231110132220.png)
 
 ### Target 3 - Hard
 
+This target had the additional info that the admins were required to enable a service that was valuable to their clients because they required a "large amount of data", and my goal was to find the version that this service was using. 
+
+There were a few ports that I thought could be relevant:
+- 22 - file transfers of the data
+- 53 - DNS 
+- 80/443 - web files
+- 445 - Windows file sharing
+- 3306 - MySQL server
+- 50000 - IBM cloud database
+- 27017 - MongoDB
+
+First I did a basic scan to see which ports were open and found that only SSH and HTTP were:
+
+![](Images/Pasted%20image%2020231110162749.png)
+
+I was able to find the versions of these services, but these were not the expected answer. Instead, I focused on the many filtered ports considering that in this scenario the target was known to have setup more robust IDS/IPS filters. 
+
+The only ports that I had tried that were filtered instead of closed were ports 53, 443, 445, and 50000. For these ports I first attempted to modify the scan to use my **eth0** interface and IP address with the options `-S 194.113.74.78 -e eth0`. Unfortunately this did not result in any different results for these ports as no version could be detected because of the filters: 
+
+![](Images/Pasted%20image%2020231110164409.png)
+
+My next goal was to attempt to perform a DNS proxy with `--source-port 53` on these ports to see if using port 53 would be an accepted connection rather than being filtered. Doing this on port 50000 resulted in the port returning as open: 
+
+![](Images/Pasted%20image%2020231110164456.png)
+
+In this scan I used a TCP SYN packet scan and with the modified source port of 53 the target responded with the SYN/ACK packet to signal that the DNS proxy worked. 
+
+Now that I could successfully form a connection with the host I attempted to find the service version of port 50000 through a couple of Nmap scripts specific to IBM DB2, `--script db2-das-info` and `--script broadcast-db2-discover`, but these did not return the expected version flag: 
+
+![](Images/Pasted%20image%2020231110164931.png)
+
+Finally, I tried to check for banners using a netcat connection to port 50000 with the source port of 53:
+
+![](Images/Pasted%20image%2020231110165123.png)
+
+Forming the connection was successful and after a few seconds the expected version flag was output!
 ## Notes 
 
 ### Enumeration
