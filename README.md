@@ -1,6 +1,12 @@
 # Nmap Network Enumeration
 
-In this project...
+In this project I use [Nmap](https://nmap.org/), a vital part of a cybersecurity analysts tool kit, and experiment with the many tools that it provides for mapping out a target network. 
+
+I first go through the core aspects of Nmap in [Host Enumeration](#host-enumeration) such as host discovery, port scanning, service detection, OS detection, and Nmap Scripting Engine. With each of these tools I will test and compare the different options that each command provides to learn about the varying ways to approach a target and optimize your scans. 
+
+Next, in [Bypass Security Measures](#bypass-security-measures), I go over some of the options to detect and evade firewalls and IDS/IPS security rules. Many real-life penetration testing scenarios will have strong security in place to detect network scanning, and I will focus on using stealth scan techniques to get around these controls. 
+
+Finally, in [Security Evasion CTFs](#security-evasion-ctfs), I use the techniques that I demonstrated in all of the previous sections to complete three capture the flag exercises on VM hosts that have IDS/IPS systems in place.  
 
 ## Table of Contents
 
@@ -26,7 +32,7 @@ In this project...
     - [Decoys](#decoys)
     - [Changing IP Addresses](#changing-ip-addresses)
     - [DNS Proxying](#dns-proxying)
-- [Security Evasion](#security-evasion)
+- [Security Evasion CTFs](#security-evasion-ctfs)
   - [Target 1 - Easy](#target-1---easy)
   - [Target 2 - Medium](#target-2---medium)
   - [Target 3 - Hard](#target-3---hard)
@@ -259,7 +265,7 @@ An example of this would be using `--source-port` to send the packet from the DN
 
 ![](Images/Pasted%20image%2020231109180153.png)
 
-## Security Evasion
+## Security Evasion CTFs
 
 Now that I have experimented with many of the tools that Nmap provides to learn more about hosts and how to modify its scans to be more stealthy, I will test these methods on three example targets. 
 
